@@ -6,7 +6,7 @@
 /*   By: mrodrigu <mrodrigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/11 18:38:54 by mrodrigu          #+#    #+#             */
-/*   Updated: 2018/06/05 03:17:25 by mrodrigu         ###   ########.fr       */
+/*   Updated: 2018/06/06 00:49:02 by mrodrigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,10 @@ void	ft_place_brick(t_mlx *mlx, int row, int col, char player)
 	pos_x = MARGEN_X + mlx->map->map_pos[0] + mlx->map->square[1] * col;
 	pos_y = MARGEN_Y + mlx->map->map_pos[1] + mlx->map->square[0] * row;
 	if (player == PLAYER_ONE)
-	{
 		brick = mlx->map->bricks[0]->data;
-	}
 	else if (player == PLAYER_TWO)
 		brick = mlx->map->bricks[1]->data;
-	else if (!player)
+	else if (player == 3)
 		brick = mlx->map->bricks[2]->data;
 	else
 		ft_error("Ese jugador no existe primo\n");

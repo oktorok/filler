@@ -6,7 +6,7 @@
 /*   By: mrodrigu <mrodrigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/01 19:01:10 by mrodrigu          #+#    #+#             */
-/*   Updated: 2018/06/05 03:11:34 by mrodrigu         ###   ########.fr       */
+/*   Updated: 2018/06/06 02:40:47 by mrodrigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ int				ft_keys(int code, void *mlx)
 	if (code == ESC)
 	{
 		destroy_all(mlx);
+		system("killall *filler* 2> /dev/null");
 		exit(0);
 	}
 	else if (code == SPACE)

@@ -6,7 +6,7 @@
 #    By: jagarcia <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/05 17:20:08 by jagarcia          #+#    #+#              #
-#    Updated: 2018/06/05 02:30:10 by mrodrigu         ###   ########.fr        #
+#    Updated: 2018/06/06 03:26:20 by mrodrigu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ NAME = jagarcia.filler
 
 GRAF_NAME = interface
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address
 
 MLXFLAGS = -lmlx -framework OpenGL -framework AppKit
 
@@ -104,3 +104,6 @@ fclean: clean
 
 re: fclean
 	make
+
+exe: $(NAME)
+	@sh start.sh

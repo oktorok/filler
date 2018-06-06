@@ -6,7 +6,7 @@
 /*   By: mrodrigu <mrodrigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/01 20:22:04 by mrodrigu          #+#    #+#             */
-/*   Updated: 2018/06/05 02:57:53 by mrodrigu         ###   ########.fr       */
+/*   Updated: 2018/06/06 02:04:12 by mrodrigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ static void		take_dim(char *line, int dim[2], int square[2])
 		square[0] = (RESOLUTION_Y - MARGEN_Y * 2) / dim[0];
 		square[1] = square[0] * BRICK_LONG / BRICK_HEIGHT;
 	}
+	free(line);
 }
 
 static void		allocate_data(t_mlx *mlx)
@@ -52,9 +53,23 @@ static void		allocate_data(t_mlx *mlx)
 		ft_error(NULL);
 	if (!(mlx->info->players = (char **)ft_memalloc(sizeof(char *) * 2)))
 		ft_error(NULL);
+	mlx->info->players[0] = NULL;
+	mlx->info->players[1] = NULL;
 	if (!(mlx->info->points_img = (void **)ft_memalloc(sizeof(void *) * 2)))
 		ft_error(NULL);
 	mlx->info->img_pause = ft_set_xpm(mlx, PAUSE);
+}
+
+static void		error(char *line)
+{
+	int flag;
+
+	ft_putstr_fd(line, 2);
+	free(line);
+	flag = get_next_line(STDIN_FILENO, &line);
+	if (flag < 0)
+		ft_error(NULL);
+	ft_error(line);
 }
 
 void			ft_initialice(t_mlx *mlx)
@@ -72,15 +87,15 @@ void			ft_initialice(t_mlx *mlx)
 			ft_error(NULL);
 		if (line[0] == '$')
 			mlx->info->players[i++] = take_name(line);
+		else if (line[0] == 'e')
+			error(line);
 		else if (line[0] == 'P')
 		{
 			take_dim(line, mlx->map->dim, mlx->map->square);
-			free(line);
 			break ;
 		}
 		free(line);
 	}
 	if (!flag)
 		ft_error("ERROR Bad Map\n");
-	return ;
 }

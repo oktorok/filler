@@ -6,7 +6,7 @@
 /*   By: mrodrigu <mrodrigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/04 03:57:58 by mrodrigu          #+#    #+#             */
-/*   Updated: 2018/06/05 02:57:32 by mrodrigu         ###   ########.fr       */
+/*   Updated: 2018/06/06 00:56:05 by mrodrigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,19 @@ void			ft_info(t_mlx *mlx)
 	mlx->info->points_img[1] = mlx_new_image(mlx->ptr, MARGEN_X, 20);
 	paint_image(mlx, 0);
 	paint_image(mlx, 1);
-	mlx_string_put(mlx->ptr, mlx->win, 70, RESOLUTION_Y - MARGEN_Y - 150,
-				COLOR_PLAYER_ONE_NFO, mlx->info->players[0]);
+	if (mlx->info->players[0])
+	{
+		mlx_string_put(mlx->ptr, mlx->win, 70, RESOLUTION_Y - MARGEN_Y - 150,
+					COLOR_PLAYER_ONE_NFO, mlx->info->players[0]);
+	}
 	mlx_string_put(mlx->ptr, mlx->win, MARGEN_X + 50, RESOLUTION_Y - MARGEN_Y
 					- 60, COLOR_PLAYER_ONE_NFO, "0");
-	mlx_string_put(mlx->ptr, mlx->win, RESOLUTION_X - MARGEN_X + 70,
-				RESOLUTION_Y - MARGEN_Y - 150, COLOR_PLAYER_TWO_NFO,
-				mlx->info->players[1]);
+	if (mlx->info->players[1])
+	{
+		mlx_string_put(mlx->ptr, mlx->win, RESOLUTION_X - MARGEN_X + 70,
+					RESOLUTION_Y - MARGEN_Y - 150, COLOR_PLAYER_TWO_NFO,
+					mlx->info->players[1]);
+	}
 	mlx_string_put(mlx->ptr, mlx->win, RESOLUTION_X - MARGEN_X + 30,
 				RESOLUTION_Y - MARGEN_Y - 60, COLOR_PLAYER_TWO_NFO, "0");
 }
