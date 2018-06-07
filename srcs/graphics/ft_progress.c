@@ -6,7 +6,7 @@
 /*   By: mrodrigu <mrodrigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/03 21:02:08 by mrodrigu          #+#    #+#             */
-/*   Updated: 2018/06/05 03:09:07 by mrodrigu         ###   ########.fr       */
+/*   Updated: 2018/06/07 20:05:29 by mrodrigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static void	p2_progress(int *addr, int width, int *lp)
 	int		j;
 
 	i = 0;
-	percent = width - (width * (lp[0])) / (lp[0] + lp[1]);
+	percent = width - (width * (lp[0] + 1)) / (lp[0] + lp[1] + 1);
 	while (i < 100)
 	{
 		j = (width - 1) + (i * width);

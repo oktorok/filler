@@ -6,7 +6,7 @@
 /*   By: mrodrigu <mrodrigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/08 19:00:35 by mrodrigu          #+#    #+#             */
-/*   Updated: 2018/06/05 02:54:33 by mrodrigu         ###   ########.fr       */
+/*   Updated: 2018/06/07 17:54:28 by mrodrigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,15 @@ static int		is_front(t_data *data, int k)
 			(data->map[k - data->map_width].is_x ||
 			data->map[k - data->map_width].is_o)) && (((k / data->map_width) !=
 			(data->map_height - 1)) && (data->map[k + data->map_width].is_x ||
-			data->map[k + data->map_width].is_o)))
+			data->map[k + data->map_width].is_o)) &&
+			(data->map[k - 1 - data->map_width].is_x ||
+			data->map[k - 1 - data->map_width].is_o)
+			&& (data->map[k + 1 - data->map_width].is_x ||
+			data->map[k + 1 - data->map_width].is_o)
+			&& (data->map[k + 1 + data->map_width].is_x ||
+			data->map[k + 1 + data->map_width].is_o)
+			&& (data->map[k - 1 + data->map_width].is_x ||
+			data->map[k - 1 + data->map_width].is_o))
 		return (0);
 	return (1);
 }
@@ -50,8 +58,15 @@ static int		check_enemy_points(t_data *data, int pos)
 	return (diff);
 }
 
-static void		check_piece_pos(t_data *data, t_aproach *apr)
+static int		check_piece_pos(t_data *data, t_aproach *apr, int r_cp)
 {
+	if (r_cp == 2)
+	{
+		apr->mp = apr->k;
+		apr->pp = apr->i;
+		return (1);
+	}
+	apr->j = 0;
 	while (apr->j < (data->piece_width * data->piece_height))
 	{
 		if (data->piece[apr->j / 8] & (0x80 >> (apr->j % 8)))
@@ -68,10 +83,13 @@ static void		check_piece_pos(t_data *data, t_aproach *apr)
 		}
 		apr->j++;
 	}
+	return (0);
 }
 
 static void		check_map(t_data *data, t_quad quad, t_aproach *apr)
 {
+	int r_cp;
+
 	while (apr->k < (quad.quad_width * quad.quad_height))
 	{
 		apr->i = 0;
@@ -83,11 +101,9 @@ static void		check_map(t_data *data, t_quad quad, t_aproach *apr)
 				{
 					if (data->piece[apr->i / 8] & (0x80 >> (apr->i % 8)))
 					{
-						if (check_position(data, apr->k, apr->i))
-						{
-							apr->j = 0;
-							check_piece_pos(data, apr);
-						}
+						if ((r_cp = check_position(data, apr->k, apr->i)))
+							if (check_piece_pos(data, apr, r_cp))
+								return ;
 					}
 					apr->i++;
 				}
