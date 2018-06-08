@@ -6,7 +6,7 @@
 /*   By: mrodrigu <mrodrigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/08 19:00:35 by mrodrigu          #+#    #+#             */
-/*   Updated: 2018/06/07 17:54:28 by mrodrigu         ###   ########.fr       */
+/*   Updated: 2018/06/09 00:50:27 by jagarcia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,9 @@ static int		check_enemy_points(t_data *data, int pos)
 		{
 			if (is_front(data, i))
 			{
-				if ((aux_diff = abs(i / data->map_width - pos / data->map_width)
-					+ abs(i % data->map_width - pos % data->map_width)) <= diff)
+				if ((aux_diff = ft_abs(i / data->map_width -
+					pos / data->map_width) + ft_abs(i % data->map_width
+					- pos % data->map_width)) <= diff)
 					diff = aux_diff;
 			}
 		}
