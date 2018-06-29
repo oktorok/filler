@@ -6,13 +6,13 @@
 #    By: jagarcia <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/05 17:20:08 by jagarcia          #+#    #+#              #
-#    Updated: 2018/06/07 20:42:35 by jagarcia         ###   ########.fr        #
+#    Updated: 2018/06/29 14:09:32 by jagarcia         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-.PHONY : all clean fclean re exe
+.PHONY : all clean fclean re exe binary1 binary2
 
-NAME = mrodrigu.filler
+NAME = jagarcia.filler
 
 GRAF_NAME = interface
 
@@ -70,40 +70,57 @@ GRAPHIC_OBJ = $(patsubst %.c, $(OBJ_DIR)%.o,$(GRAPHIC_FUNCS))
 OBJ = $(MAIN_OBJ) $(GRAPHIC_OBJ)
 
 
-all : $(NAME)
+all : $(LIBFT_DIR)$(LIBFT_NAME) $(NAME) $(GRAF_NAME)
 
-$(NAME) : $(MAIN_OBJ) $(LIBFT_DIR)$(LIBFT_NAME) $(GRAF_NAME)
-	gcc $(MAIN_OBJ) -L$(LIBFT_DIR) -l$(LIBFT_ABREV) -I$(INCLUDES_DIR) $(CFLAGS) -o $(NAME)
+$(NAME) :
+	@printf "\033[92mCreating $(NAME)\033[0m\n"
+	@$(MAKE) binary1
+	@gcc $(MAIN_OBJ) -L$(LIBFT_DIR) -l$(LIBFT_ABREV) -I$(INCLUDES_DIR) $(CFLAGS) -o $(NAME)
+	@printf "\033[92mDone $(NAME)[\xE2\x9C\x94]\n\033[0m"
 
-$(GRAF_NAME): $(GRAPHIC_OBJ)
-	gcc $(GRAPHIC_OBJ) $(MLXFLAGS) -L$(LIBFT_DIR) -l$(LIBFT_ABREV) -I$(INCLUDES_DIR) $(CFLAGS) -o $(GRAF_NAME)
+$(GRAF_NAME):
+	@printf "\033[92mCreating $(GRAF_NAME)\033[0m\n"
+	@$(MAKE) binary2
+	@gcc $(GRAPHIC_OBJ) $(MLXFLAGS) -L$(LIBFT_DIR) -l$(LIBFT_ABREV) -I$(INCLUDES_DIR) $(CFLAGS) -o $(GRAF_NAME)
+	@printf "\033[92mDone $(GRAF_NAME)[\xE2\x9C\x94]\n\033[0m"
+
+binary2: $(LIBFT_DIR)$(LIBFT_NAME) $(GRAPHIC_OBJ)
+
+binary1: $(LIBFT_DIR)$(LIBFT_NAME) $(MAIN_OBJ)
 
 $(LIBFT_DIR)$(LIBFT_NAME):
-	$(MAKE) -C $(LIBFT_DIR)
+	@printf "\033[92mCompiling libft...\n\033[0m"
+	@$(MAKE) -C $(LIBFT_DIR)
+	@printf "\033[92mDone $(@F)[\xE2\x9C\x94]\n\033[0m"
+
 
 $(OBJ_DIR)%.o : $(MAIN_DIR)%.c $(HEADER_PATH)
-	gcc $(CFLAGS) -c -I $(INCLUDES_DIR) $<
-	mkdir -p $(OBJ_DIR)
-	mv -f $(@F) $(OBJ_DIR)
+	@printf "\033[92m--->Compiling $(@F)\n\033[0m"
+	@gcc $(CFLAGS) -c -I $(INCLUDES_DIR) $<
+	@mkdir -p $(OBJ_DIR)
+	@mv -f $(@F) $(OBJ_DIR)
 
 $(OBJ_DIR)%.o : $(GRAPHIC_DIR)%.c $(HEADER_PATH)
-	gcc $(CFLAGS) -c -I $(INCLUDES_DIR) $<
-	mkdir -p $(OBJ_DIR)
-	mv -f $(@F) $(OBJ_DIR)
+	@printf "\033[92m--->Compiling $(@F)\n\033[0m"
+	@gcc $(CFLAGS) -c -I $(INCLUDES_DIR) $<
+	@mkdir -p $(OBJ_DIR)
+	@mv -f $(@F) $(OBJ_DIR)
 
 clean:
-	rm -f $(OBJ_SRC)
-	rm -rf $(OBJ_DIR)
-	$(MAKE) -C $(LIBFT_DIR) clean
+	@printf "\033[92m***Cleaning Objects***\033[0m\n"
+	@rm -f $(OBJ_SRC)
+	@rm -rf $(OBJ_DIR)
+	@$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
-	rm -f filler.trace
-	rm -f $(NAME)
-	rm -f $(GRAF_NAME)
-	$(MAKE) -C $(LIBFT_DIR) fclean
+	@printf "\033[92m***Cleaning Executables***\033[0m\n"
+	@rm -f filler.trace
+	@rm -f $(NAME)
+	@rm -f $(GRAF_NAME)
+	@$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean
-	make
+	@make
 
-exe: $(NAME)
+exe: $(all)
 	@sh start.sh
