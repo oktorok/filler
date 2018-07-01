@@ -6,7 +6,7 @@
 #    By: jagarcia <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/05 17:20:08 by jagarcia          #+#    #+#              #
-#    Updated: 2018/06/29 14:09:32 by jagarcia         ###   ########.fr        #
+#    Updated: 2018/07/01 12:43:48 by jagarcia         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,8 +69,9 @@ GRAPHIC_OBJ = $(patsubst %.c, $(OBJ_DIR)%.o,$(GRAPHIC_FUNCS))
 
 OBJ = $(MAIN_OBJ) $(GRAPHIC_OBJ)
 
+.PHONY: $(LIBFT_DIR)$(LIBFT_NAME)
 
-all : $(LIBFT_DIR)$(LIBFT_NAME) $(NAME) $(GRAF_NAME)
+all : | $(LIBFT_DIR)$(LIBFT_NAME) $(NAME) $(GRAF_NAME) 
 
 $(NAME) :
 	@printf "\033[92mCreating $(NAME)\033[0m\n"
@@ -84,14 +85,12 @@ $(GRAF_NAME):
 	@gcc $(GRAPHIC_OBJ) $(MLXFLAGS) -L$(LIBFT_DIR) -l$(LIBFT_ABREV) -I$(INCLUDES_DIR) $(CFLAGS) -o $(GRAF_NAME)
 	@printf "\033[92mDone $(GRAF_NAME)[\xE2\x9C\x94]\n\033[0m"
 
-binary2: $(LIBFT_DIR)$(LIBFT_NAME) $(GRAPHIC_OBJ)
+binary2: $(GRAPHIC_OBJ)
 
-binary1: $(LIBFT_DIR)$(LIBFT_NAME) $(MAIN_OBJ)
+binary1: $(MAIN_OBJ)
 
 $(LIBFT_DIR)$(LIBFT_NAME):
-	@printf "\033[92mCompiling libft...\n\033[0m"
-	@$(MAKE) -C $(LIBFT_DIR)
-	@printf "\033[92mDone $(@F)[\xE2\x9C\x94]\n\033[0m"
+	@$(MAKE) -sC $(LIBFT_DIR)
 
 
 $(OBJ_DIR)%.o : $(MAIN_DIR)%.c $(HEADER_PATH)
