@@ -6,7 +6,7 @@
 #    By: jagarcia <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/12/05 17:20:08 by jagarcia          #+#    #+#              #
-#    Updated: 2018/07/01 12:43:48 by jagarcia         ###   ########.fr        #
+#    Updated: 2018/07/01 22:35:55 by jagarcia         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,29 +69,30 @@ GRAPHIC_OBJ = $(patsubst %.c, $(OBJ_DIR)%.o,$(GRAPHIC_FUNCS))
 
 OBJ = $(MAIN_OBJ) $(GRAPHIC_OBJ)
 
-.PHONY: $(LIBFT_DIR)$(LIBFT_NAME)
+.PHONY: $(LIBFT_DIR)$(LIBFT_NAME) $(NAME) $(GRAF_NAME)
 
-all : | $(LIBFT_DIR)$(LIBFT_NAME) $(NAME) $(GRAF_NAME) 
+MODE = 0
 
-$(NAME) :
+ifeq ($(MODE), 0)
+all: $(LIBFT_DIR)$(LIBFT_NAME) $(NAME) $(GRAF_NAME)
+
+$(NAME):$(MAIN_OBJ)
+
+$(GRAF_NAME): $(GRAPHIC_OBJ)
+
+$(OBJ_DIR)%.o : $(MAIN_DIR)%.c
 	@printf "\033[92mCreating $(NAME)\033[0m\n"
-	@$(MAKE) binary1
-	@gcc $(MAIN_OBJ) -L$(LIBFT_DIR) -l$(LIBFT_ABREV) -I$(INCLUDES_DIR) $(CFLAGS) -o $(NAME)
+	@$(MAKE) MODE=1 $(NAME)
 	@printf "\033[92mDone $(NAME)[\xE2\x9C\x94]\n\033[0m"
 
-$(GRAF_NAME):
+$(OBJ_DIR)%.o: $(GRAPHIC_DIR)%.c
 	@printf "\033[92mCreating $(GRAF_NAME)\033[0m\n"
-	@$(MAKE) binary2
-	@gcc $(GRAPHIC_OBJ) $(MLXFLAGS) -L$(LIBFT_DIR) -l$(LIBFT_ABREV) -I$(INCLUDES_DIR) $(CFLAGS) -o $(GRAF_NAME)
+	@$(MAKE) MODE=1 $(GRAF_NAME)
 	@printf "\033[92mDone $(GRAF_NAME)[\xE2\x9C\x94]\n\033[0m"
+else
 
-binary2: $(GRAPHIC_OBJ)
-
-binary1: $(MAIN_OBJ)
-
-$(LIBFT_DIR)$(LIBFT_NAME):
-	@$(MAKE) -sC $(LIBFT_DIR)
-
+$(NAME) : $(MAIN_OBJ) $(LIBFT_DIR)$(LIBFT_NAME)
+	@gcc $(MAIN_OBJ) -L$(LIBFT_DIR) -l$(LIBFT_ABREV) -I$(INCLUDES_DIR) $(CFLAGS) -o $(NAME)
 
 $(OBJ_DIR)%.o : $(MAIN_DIR)%.c $(HEADER_PATH)
 	@printf "\033[92m--->Compiling $(@F)\n\033[0m"
@@ -99,11 +100,18 @@ $(OBJ_DIR)%.o : $(MAIN_DIR)%.c $(HEADER_PATH)
 	@mkdir -p $(OBJ_DIR)
 	@mv -f $(@F) $(OBJ_DIR)
 
+$(GRAF_NAME): $(GRAPHIC_OBJ) $(LIBFT_DIR)$(LIBFT_NAME)
+	@gcc $(GRAPHIC_OBJ) $(MLXFLAGS) -L$(LIBFT_DIR) -l$(LIBFT_ABREV) -I$(INCLUDES_DIR) $(CFLAGS) -o $(GRAF_NAME)
+
 $(OBJ_DIR)%.o : $(GRAPHIC_DIR)%.c $(HEADER_PATH)
 	@printf "\033[92m--->Compiling $(@F)\n\033[0m"
 	@gcc $(CFLAGS) -c -I $(INCLUDES_DIR) $<
 	@mkdir -p $(OBJ_DIR)
 	@mv -f $(@F) $(OBJ_DIR)
+endif
+
+$(LIBFT_DIR)$(LIBFT_NAME):
+	@$(MAKE) -sC $(LIBFT_DIR)
 
 clean:
 	@printf "\033[92m***Cleaning Objects***\033[0m\n"
